@@ -1,0 +1,25 @@
+services:
+  frontend:
+    image: micle156/frontend:latest
+    ports:
+      - "8081:80"
+    depends_on:
+      - api
+    networks:
+      - app-net
+  api:
+    image: containous/whoami
+    networks:
+      - app-net
+  logger:
+    image: busybox
+    command: sh -c 'while true; do echo "$(date) log entry" >> /data/log.txt; slee p 2; done'
+    volumes:
+      - logger-data:/data
+    networks:
+      - app-net
+networks:
+  app-net:
+    driver: bridge
+volumes:
+  logger-data:
